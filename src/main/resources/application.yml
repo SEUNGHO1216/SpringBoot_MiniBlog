@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:mysql://spring-boot-db.c6wukdjxvf6m.ap-northeast-2.rds.amazonaws.com:3306/myselectshop?serverTimezone=Asia/Seoul&useLegacyDatetimeCode=false
+    username: seungho1216
+    password: Qortmd0102!
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+

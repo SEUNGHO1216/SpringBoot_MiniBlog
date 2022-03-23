@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LLave's Blog | 스프링부트연습</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body{
+            width:100vw;
+            height: 100vw;
+            background-color: #fafafa;
+        }
+        .mytitle{
+            width: 100%;
+            height: 300px;
+
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://img.freepik.com/free-photo/lights-on-sea-background-waves_196038-161.jpg");
+            background-position: center;
+            background-size: cover;
+
+            color: white;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .mytitle > h1{
+            font-size: 50px;
+            font-weight: 700;
+        }
+        #mainpage{
+            max-width:600px;
+            width:95%;
+            margin:auto;
+            margin-top:50px;
+            margin-bottom: 30px;
+        }
+        .null-contents{
+            text-align: center;
+            font-size: 30px;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            showAll();
+        })
+        //모든 게시물을 최종 게시물수정 날짜 기준 내림차순 정렬
+        function showAll() {
+            $.ajax({
+                type: "GET",
+                url: "/api/blogs",
+                success: function (response) {
+                    $('#tbody-box').empty();
+                    if(response.length==0){
+                        let temp_html=`<tr>
+                                            <td colspan="4" class="null-contents">
+                                                <span class="null-contents">게시물이 없습니다.</span>
+                                            </td>
+                                        </tr>`
+                        $('#tbody-box').append(temp_html);
+                        return;
+                    }
+                    for (let i = 0; i < response.length; i++) {
+
+                        let id = response[i].id;
+                        let title = response[i].title;
+                        let writer = response[i].writer;
+                        let modifiedAt = response[i].modifiedAt;
+                        addHTML(id, title, writer, modifiedAt);
+                    }
+                }
+            })
+        }
+
+        function addHTML(id, title, writer, modifiedAt) {
+            let temp_html = `<tr>
+                                <td style="width:120px;">${writer}</td>
+                                <th scope="row" onclick="moveToDetail('${id}');" style="cursor: pointer;">${title}</th>
+                                <td>${modifiedAt}</td>
+                                <td>
+                                    <img src="images/delete-icon.png" onclick="deleteDetail('${id}')" alt="" style="cursor: pointer">
+                                </td>
+                            </tr>`
+            $('#tbody-box').append(temp_html);
+        }
+        //이 함수로 '게시물 조회 페이지'에 id 전달!
+        function moveToDetail(id){
+            window.location.href=`/api/blogs/articles?id=${id}`;
+        }
+        function deleteDetail(id){
+            $.ajax({
+                type:"DELETE",
+                url:`/api/blogs/${id}`,
+                contentType:"application/json",
+                data:JSON.stringify({id:id}),
+                success:function (response){
+                    alert('게시물이 삭제되었습니다!');
+                    window.location.reload();
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+<!--메인 페이지-->
+<div class="mytitle">
+    <h1>LLave's 항해 일기</h1>
+</div>
+<div id="mainpage">
+    <div class="text-end">
+        <button class="btn btn-dark" onclick="location.href='/api/blogs/posts';">글작성</button>
+    </div>
+    <div id="table-box" class="table-box">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">작성자</th>
+                <th scope="col">제목</th>
+                <th scope="col">작성날짜</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody id="tbody-box">
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
