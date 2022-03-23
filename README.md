@@ -1,6 +1,9 @@
 # SpringBoot_MiniBlog
 ----
-## SpringBoot를 활용한 첫 웹 게시판 사이트 구현
+## SpringBoot를 활용한 첫 웹어플리케이션 구현
+
+**사이트**
+http://benjamin-tech.shop/
 <br>
 
 **주요 기능**
