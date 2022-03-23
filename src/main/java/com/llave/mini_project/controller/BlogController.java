@@ -38,7 +38,7 @@ public class BlogController {
         return blog;
     }
 
-    @PutMapping("/api/blogs/{id}") //쿼리로 보내면 안 되나..?
+    @PutMapping("/api/blogs/{id}")
     public Long updateBlog(@PathVariable Long id, @RequestBody BlogRequestDto requestDto){
         return blogService.updateBlog(id,requestDto);
     }
