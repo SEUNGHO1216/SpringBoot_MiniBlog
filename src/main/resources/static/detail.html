@@ -100,7 +100,7 @@
                                     <div id="detail-date" class="moddate">생성일자(최종수정일자) : ${response.modifiedAt}</div>
                                     <div class="text-end detail-btn-box">
                                         <button onclick="location.href='/';" class="btn btn-dark" id="goback">돌아가기</button>
-                                        <button onclick='updateOne(${JSON.stringify(response)});' class="btn btn-dark" id="update">수정</button>
+                                        <button onclick="updateOne('${id}');" class="btn btn-dark" id="update">수정</button>
                                         <button onclick="deleteOne();" class="btn btn-dark" id="delete">삭제</button>
                                     </div>`
                     $('#detail-box').append(temp_html);
@@ -108,19 +108,21 @@
             })
         }
         //수정 버튼 누를 시 기존 정보 불러와서 보여줌
-        function updateOne(response){
-            console.log("나와라 콘솔제발"+response);
+        function updateOne(id){
+            console.log("나와라 콘솔제발"+id);
             //기존 조회창 숨기고 수정창 보여준다
             $('#detail-box').hide();
             $('#detail-update-box').show();
 
-            let title=response.title;
-            $('#title').val(title);
-            let writer=response.writer;
-            $('#writer').val(writer);
-            let contents=response.contents;
-            $('textarea#contents').val(contents);
-
+            $.ajax({
+                type:"GET",
+                url:`/api/blogs/${id}`,
+                success:function (response){
+                    $('#title').val(response.title);
+                    $('#writer').val(response.writer);
+                    $('textarea#contents').val(response.contents);
+                }
+            })
         }
         //수정 완료하고 제출버튼 누를 시 db에 정보 전달
         function updateSubmit(targetId){
