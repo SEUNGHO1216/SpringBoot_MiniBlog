@@ -28,4 +28,5 @@ http://benjamin-tech.shop/
 **보완할 점**
 - SPA 시도
 - 공란 입력시 alert창 생성
+- 로그인 한 유저가 로그인이나 회원가입 진행하려 할 시 프론트에 alert 보여주기
 
