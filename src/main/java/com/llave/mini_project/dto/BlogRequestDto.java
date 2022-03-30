@@ -1,4 +1,4 @@
-package com.llave.mini_project.models;
+package com.llave.mini_project.dto;
 
 import lombok.Getter;
 

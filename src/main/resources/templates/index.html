@@ -1,5 +1,7 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -33,10 +35,16 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            position: relative;
         }
         .mytitle > h1{
             font-size: 50px;
             font-weight: 700;
+        }
+        .info-section{
+            position: absolute;
+            top:20%;
+            right: 20%;
         }
         #mainpage{
             max-width:600px;
@@ -54,6 +62,7 @@
     <script>
         $(document).ready(function () {
             showAll();
+            loginSuccess();
         })
         //모든 게시물을 최종 게시물수정 날짜 기준 내림차순 정렬
         function showAll() {
@@ -89,7 +98,7 @@
                                 <th scope="row" onclick="moveToDetail('${id}');" style="cursor: pointer;">${title}</th>
                                 <td>${modifiedAt}</td>
                                 <td>
-                                    <img src="images/delete-icon.png" onclick="deleteDetail('${id}')" alt="" style="cursor: pointer">
+                                    <img src="/images/delete-icon.png" onclick="deleteDetail('${id}')" alt="" style="cursor: pointer">
                                 </td>
                             </tr>`
             $('#tbody-box').append(temp_html);
@@ -110,13 +119,37 @@
                 }
             })
         }
+        function loginSuccess(){
+            $.ajax({
+                type:"GET",
+                url:"/api/blog/success",
+                success:function (response){
+                    if(response.length<=15){
+                        $('#userWelcome').text(response);
+                    }
+                }
+            })
+        }
     </script>
 </head>
 <body>
-<!--메인 페이지-->
+<!--메인 페이지 헤더-->
 <div class="mytitle">
     <h1>LLave's 항해 일기</h1>
+    <span sec:authorize="isAuthenticated()" ><strong id="userWelcome" style="color: whitesmoke;"> </strong>님, 당신이 최고!</span>
+    <div class="info-section">
+        <div class="no-login-user" sec:authorize="!isAuthenticated()">
+            <button class="btn btn-primary" onclick="location.href='/user/login'">로그인</button>
+            <button class="btn btn-primary" onclick="location.href='/user/signup'">회원가입</button>
+        </div>
+        <div class="login-user" sec:authorize="isAuthenticated()">
+            <form id="logout-form" method="post" action="/user/logout">
+                <button class="btn btn-primary" onclick="document.getElementById('logout-form').submit();">로그아웃</button>
+            </form>
+        </div>
+    </div>
 </div>
+<!--메인 페이지 컨텐츠-->
 <div id="mainpage">
     <div class="text-end">
         <button class="btn btn-dark" onclick="location.href='/api/blogs/posts';">글작성</button>

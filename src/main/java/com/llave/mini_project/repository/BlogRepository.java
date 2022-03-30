@@ -1,5 +1,6 @@
-package com.llave.mini_project.models;
+package com.llave.mini_project.repository;
 
+import com.llave.mini_project.models.Blog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

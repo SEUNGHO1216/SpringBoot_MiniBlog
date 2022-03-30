@@ -1,6 +1,7 @@
 package com.llave.mini_project.models;
 
 
+import com.llave.mini_project.dto.BlogRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

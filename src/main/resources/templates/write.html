@@ -73,18 +73,18 @@
             <div class="field">
                 <label class="label">제목</label>
                 <div class="control">
-                    <input class="input" type="text" id="title" placeholder="제목을 입력해주세요!">
+                    <input class="input" type="text" id="title" placeholder="제목을 입력해주세요!" required>
                 </div>
             </div>
             <div class="field">
                 <label class="label">작성자</label>
                 <div class="control">
-                    <input class="input" type="text" id="writer" placeholder="사용할 이름(or 별명)을 기입해주세요!">
+                    <input class="input" type="text" id="writer" placeholder="사용할 이름(or 별명)을 기입해주세요!" required>
                 </div>
             </div>
-            <textarea id="contents" class="textarea" placeholder="오늘, 나만의, 항해하면서 쓰고싶은 것들을 써주세요!" rows="10"></textarea>
+            <textarea id="contents" class="textarea" placeholder="오늘, 나만의, 항해하면서 쓰고싶은 것들을 써주세요!" rows="10" required></textarea>
             <div class="writeBtns text-end mt-2">
-                <button onclick="history.go(-1);" class="button is-black">뒤로 가기</button>
+                <button onclick="location.href='/';" class="button is-black">뒤로 가기</button>
                 <button onclick="save()" class="button is-black" id="saveArticle">글쓰기</button>
             </div>
         </div>
