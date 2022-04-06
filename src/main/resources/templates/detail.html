@@ -88,6 +88,7 @@
         }
         /*]]>*/
         let userReplyId;//댓글 쓴 사람 밑에서 받아옴
+        let blog;//블로그 정보
 
         //url로 넘긴 파라미터를 받아오는 함수
         function getParameter(name) {
@@ -97,9 +98,10 @@
             return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, ""));
         }
 
-        let targetId;
+        let targetId;//블로그 ID
         $(document).ready(function (){
             showOne();//게시물 내용 보여줌
+
             showReplies();//게시물의 댓글을 보여줌
         })
 
@@ -112,9 +114,11 @@
                 tpye:"GET",
                 url:`/api/blogs/one/${id}`,
                 success:function (response){
+                    blog=response;
                     $('#detail-box').empty();
                     let temp_html=`<p class="title is-2 is-spaced">${response.title}</p>
                                    <p class="subtitle is-4">${response.writer}</p>
+                                   <span id="heart" onclick="heart();" style="cursor:pointer;">❤ :</span><span id="heartCount" style="cursor: pointer;"></span>
                                     <div id="detail-contents" class="container is-fluid">
                                         <div class="field">
                                           <div class="control">
@@ -129,6 +133,7 @@
                                         <button onclick="deleteOne();" class="btn btn-dark" id="delete">삭제</button>
                                     </div>`
                     $('#detail-box').append(temp_html);
+                    heartShow();
                 }
             })
         }
@@ -179,7 +184,49 @@
                 }
             })
         }
+        //좋아요 추가
+        function heart(){
+            blog//블로그 정보
 
+            $.ajax({
+                type:"POST",
+                url:"/api/heart",
+                contentType:"application/json",
+                data:JSON.stringify(blog),
+                success:function (response){
+                    console.log(response)
+                    if(response ==-1){
+                        alert("로그인을 먼저 진행해주세요");
+                        window.location.href="/user/login";
+                    }else{
+                        //좋아요가 추가되면
+                        if($('#heartCount').text()<response){
+                            let temp="♥ :"
+                            $('#heart').text(temp)
+                        }else{
+                            //좋아요가 취소되면
+                            let temp="♡ :"
+                            $('#heart').text(temp)
+                        }
+                        let temp_html=`${response}`
+                        $('#heartCount').text(temp_html);
+                    }
+                }
+            })
+        }
+        //좋아요 출력
+        function heartShow(){
+            $.ajax({
+                type:"GET",
+                url:`/api/heart/${targetId}`,
+                success:function (response){
+                    let temp_html=`${response}`
+                    $('#heartCount').append(temp_html);
+                }
+            })
+        }
+
+        //------------------------댓글 관련 js-------------------------
         //해당 게시물 댓글 불러오기
         function showReplies(){
             $.ajax({
@@ -396,13 +443,13 @@
                             <span class="icon is-small">
                               <i class="fas fa-edit" aria-hidden="true"></i>
                             </span>
-                </a>
+            </a>
                 <img src="/images/submit.png" onclick="createReply();" class="is-right" style="cursor: pointer;"><a href="" aria-label="submit">
                             <span class="icon is-small">
                               <i class="fas fa-delete" aria-hidden="true"></i>
                             </span>
                 </img>
-                </a>
+            </a>
             </div>
         </nav>
     </div>

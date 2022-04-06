@@ -31,7 +31,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf()
                 .ignoringAntMatchers("/user/**")
                 .ignoringAntMatchers("/api/blogs/**")
-                .ignoringAntMatchers("/api/reply/**");
+                .ignoringAntMatchers("/api/reply/**")
+                .ignoringAntMatchers("/api/heart/**");
 
         http.authorizeRequests()
         // image 폴더를 login 없이 허용
@@ -43,7 +44,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/blogs",
                         "/api/blogs/one/**",
                         "/api/blogs/articles*",
-                        "/api/reply/**").permitAll()
+                        "/api/reply/**",
+                        "/api/heart/**").permitAll()
         // 어떤 요청이든 '인증'
                 .anyRequest().authenticated()
                 .and()
